@@ -4,6 +4,7 @@ import bgPattern from "../assets/pet adoption background.png";
 
 export default function App() {
   const [scale, setScale] = useState(1);
+  const [contentHeight, setContentHeight] = useState(5361);
 
   useEffect(() => {
     const handleResize = () => {
@@ -24,9 +25,9 @@ export default function App() {
 
   return (
     <div
-      className="w-full min-h-screen overflow-x-hidden flex justify-center"
+      className="w-full min-h-screen overflow-hidden flex justify-center"
       style={{ 
-        height: 5361 * scale,
+        height: contentHeight * scale,
         backgroundImage: `url("${bgPattern}")`,
         backgroundRepeat: 'repeat',
         backgroundSize: '100% auto',
@@ -38,10 +39,10 @@ export default function App() {
           transform: `scale(${scale})`,
           transformOrigin: 'top center',
           width: '1440px',
-          height: '5361px'
+          height: `${contentHeight}px`
         }}
       >
-        <PetAdoptionLandingPage />
+        <PetAdoptionLandingPage onHeightChange={setContentHeight} />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import svgPaths from "./svg-l8a5nkkvbb";
 import imgImage8 from "figma:asset/3ee116e0e0c5d8493030f59bcdee8e02f4f843de.png";
 import imgImage6 from "figma:asset/39822095d3bd75db7100b528723679e4b42cf543.png";
@@ -8116,8 +8116,14 @@ function AdoptNowButton() {
   );
 }
 
-export default function PetAdoptionLandingPage() {
+export default function PetAdoptionLandingPage({ onHeightChange }: { onHeightChange?: (height: number) => void }) {
   const [faqExtraHeight, setFaqExtraHeight] = useState(0);
+
+  useEffect(() => {
+    if (onHeightChange) {
+      onHeightChange(5361 + faqExtraHeight);
+    }
+  }, [faqExtraHeight, onHeightChange]);
 
   return (
     <div className="relative w-[1440px] mx-auto overflow-hidden bg-transparent transition-all duration-300" style={{ height: 5361 + faqExtraHeight }} data-name="pet adoption landing page">
