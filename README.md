@@ -1,5 +1,5 @@
 
-  # Replicate Website Design
+  # Paw - Pet Adoption Partner
 
   This is a code bundle for Replicate Website Design. The original project is available at https://www.figma.com/design/fwof24a04YI3CvV7n2MXLS/Replicate-Website-Design.
 
