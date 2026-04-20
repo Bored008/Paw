@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useNavigate } from "react-router";
 import bgPawPattern from "../../assets/d15d8a3400ac588591d5698365ec9b4b844e08fe.png";
-import dogPhoto from "../../assets/b50d4b56c6d9290ee025ae688b1e6b46418f53cc.png";
+import { ALL_PETS, PetData, SELECTED_PET_ID_KEY } from "../../data/pets";
 import { Footer, LandingNavBar } from "../Landing/LandingPage";
 
 import {
@@ -15,12 +16,14 @@ import {
 } from "./Generated/DogProfile";
 
 
-const HeroSection = () => {
+const HeroSection = ({ pet }: { pet: PetData }) => {
+  const navigate = useNavigate();
+
   return (
     <section className="relative w-full max-w-7xl mx-auto rounded-[48px] overflow-hidden min-h-[500px] lg:min-h-[716px] flex flex-col justify-end">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <img src={dogPhoto} alt="Golden Retriever" className="w-full h-full object-cover object-center" />
+        <img src={pet.img} alt={pet.name} className="w-full h-full object-cover object-[center_22%]" />
       </div>
 
       {/* Gradient Overlay */}
@@ -31,12 +34,12 @@ const HeroSection = () => {
         {/* Navigation Arrows */}
         <div className="absolute inset-y-0 left-4 md:left-8 flex items-center">
           <button className="w-12 h-12 md:w-24 md:h-24 hover:scale-110 transition-transform opacity-75 hover:opacity-100 rotate-180">
-            <ArrowIcon />
+            <ArrowIcon variant="prev" />
           </button>
         </div>
         <div className="absolute inset-y-0 right-4 md:right-8 flex items-center">
           <button className="w-12 h-12 md:w-24 md:h-24 hover:scale-110 transition-transform opacity-75 hover:opacity-100">
-            <ArrowIcon />
+            <ArrowIcon variant="next" />
           </button>
         </div>
 
@@ -48,17 +51,17 @@ const HeroSection = () => {
                 Ready For Home
               </span>
               <span className="bg-[#c8f24f] text-[#445900] font-['Inter'] font-semibold text-xs md:text-sm tracking-wide uppercase px-4 py-1.5 rounded-sm">
-                2 Years Old
+                {pet.age}
               </span>
             </div>
 
             <h1 className="font-['Poppins'] font-extrabold text-5xl md:text-7xl lg:text-[96px] leading-none text-white tracking-[-0.05em]">
-              Willow
+              {pet.name}
             </h1>
 
             <div className="flex items-center gap-2 opacity-90 text-white font-['Inter'] font-medium text-lg md:text-xl">
               <div className="w-4 h-5"><PinIcon /></div>
-              <span>Sonipat, Haryana</span>
+              <span>{pet.location}</span>
             </div>
           </div>
 
@@ -67,13 +70,16 @@ const HeroSection = () => {
             <div className="flex justify-between items-center">
               <div className="flex flex-col gap-1">
                 <span className="font-['Inter'] font-semibold text-[#767773] text-xs tracking-widest uppercase">Breed</span>
-                <span className="font-['Inter'] font-semibold text-[#2e2f2c] text-base">Golden Retriever</span>
+                <span className="font-['Inter'] font-semibold text-[#2e2f2c] text-base">{pet.breed}</span>
               </div>
               <div className="w-10 h-10 rounded-full bg-[#46a5ff]/20 flex items-center justify-center text-[#4CBFFF]">
                 <div className="w-5 h-[19px]"><BreedPawIcon /></div>
               </div>
             </div>
-            <button className="w-full bg-[#4cbfff] hover:bg-[#3ba2f2] transition-colors py-4 rounded-full flex items-center justify-center gap-2 text-white font-['Inter'] font-semibold text-lg">
+            <button
+              onClick={() => navigate("/adoption")}
+              className="w-full bg-[#4cbfff] hover:bg-[#3ba2f2] transition-colors py-4 rounded-full flex items-center justify-center gap-2 text-white font-['Inter'] font-semibold text-lg"
+            >
               Adopt Me
               <div className="w-5 h-[18px]"><HeartIcon /></div>
             </button>
@@ -117,7 +123,7 @@ const Traits = () => {
   );
 };
 
-const MainContent = () => {
+const MainContent = ({ pet }: { pet: PetData }) => {
   return (
     <section className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 pt-16">
       {/* Left Column (About & Traits) */}
@@ -128,10 +134,10 @@ const MainContent = () => {
           </h2>
           <div className="font-['Inter'] text-[#5b5c58] text-lg md:text-xl leading-relaxed space-y-6">
             <p>
-              Willow is the sunshine of our shelter! A gentle soul with a tail that never stops wagging, she loves morning strolls and afternoon belly rubs. She was rescued from a local park and has since shown nothing but love to every human she meets. Willow is perfectly leash-trained and knows basic commands like "sit" and "stay".
+              {pet.about}
             </p>
             <p>
-              She thrives in environments where she can get plenty of attention and moderate exercise. She's particularly fond of squeaky toys and has a soft spot for organic peanut butter treats.
+              {`${pet.name} is a ${pet.gender.toLowerCase()} ${pet.breed} from ${pet.location}. ${pet.age} old and eager to find a loving forever home.`}
             </p>
           </div>
         </div>
@@ -172,6 +178,17 @@ const MainContent = () => {
 
 
 export default function ProfilePage() {
+  const selectedPet = useMemo(() => {
+    const selectedId = Number(localStorage.getItem(SELECTED_PET_ID_KEY));
+    if (Number.isFinite(selectedId)) {
+      const matchedPet = ALL_PETS.find((pet) => pet.id === selectedId);
+      if (matchedPet) {
+        return matchedPet;
+      }
+    }
+    return ALL_PETS[0];
+  }, []);
+
   return (
     <div className="relative min-h-screen bg-[#fcfdfc] overflow-x-hidden font-['Inter'] text-[#2e2f2c]">
       {/* Background Paw Pattern */}
@@ -189,11 +206,12 @@ export default function ProfilePage() {
         <LandingNavBar activePage="available-pets" />
 
         <main className="flex-grow pt-28 px-4 sm:px-6 lg:px-8 pb-[100px] w-full mx-auto">
-          <HeroSection />
-          <MainContent />
+          <HeroSection pet={selectedPet} />
+          <MainContent pet={selectedPet} />
         </main>
 
-        <div className="w-full relative overflow-hidden h-[560px]">
+        {/* Footer section — same exported <Footer /> as landing page */}
+        <div className="relative bottom-0 left-0 w-full overflow-x-hidden">
           <Footer />
         </div>
       </div>

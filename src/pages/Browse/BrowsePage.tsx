@@ -1,29 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { Footer, LandingNavBar } from "../Landing/LandingPage";
-import img1 from "../../assets/3ee116e0e0c5d8493030f59bcdee8e02f4f843de.png";
-import img2 from "../../assets/39822095d3bd75db7100b528723679e4b42cf543.png";
-import img3 from "../../assets/9454f91fce9e5214dc9ff8b02cd0332a7039c7fe.png";
-import img4 from "../../assets/1e9849d13a0b644f82eadce2da5525778537dae6.png";
-import img5 from "../../assets/a4dc20a82cb8d933274abe6781201d2989656bbd.png";
-import img6 from "../../assets/a7866d29e4780753510254295b12e47b847d44e2.png";
+import { ADOPTED_PET_IDS_KEY, ALL_PETS, PetData, SELECTED_PET_ID_KEY } from "../../data/pets";
 // heroImg removed — background is now the paw pattern from App.tsx BrowseWrapper
-
-// ─── Data ───────────────────────────────────────────────────────────────────
-const ALL_PETS = [
-  { id: 1,  name: "Rocky",   breed: "Indie",     gender: "Male",   age: "2 years",    location: "Sonipat, Haryana",   size: "Medium", img: img1 },
-  { id: 2,  name: "Lucky",   breed: "Indie",     gender: "Male",   age: "5 months",   location: "Panipat, Haryana",   size: "Small",  img: img2 },
-  { id: 3,  name: "Sheru",   breed: "Labrador",  gender: "Male",   age: "1 year",     location: "Delhi, NCR",         size: "Large",  img: img3 },
-  { id: 4,  name: "Milo",    breed: "Pomeranian",gender: "Male",   age: "8 months",   location: "Gurgaon, Haryana",   size: "Small",  img: img4 },
-  { id: 5,  name: "Bella",   breed: "Indie",     gender: "Female", age: "3 years",    location: "Rohtak, Haryana",    size: "Medium", img: img5 },
-  { id: 6,  name: "Daisy",   breed: "Beagle",    gender: "Female", age: "6 months",   location: "Faridabad, Haryana", size: "Small",  img: img6 },
-  { id: 7,  name: "Bruno",   breed: "Indie",     gender: "Male",   age: "4 years",    location: "Sonipat, Haryana",   size: "Large",  img: img1 },
-  { id: 8,  name: "Cookie",  breed: "Poodle",    gender: "Female", age: "1 year",     location: "Delhi, NCR",         size: "Small",  img: img2 },
-  { id: 9,  name: "Charlie", breed: "Labrador",  gender: "Male",   age: "2 years",    location: "Panipat, Haryana",   size: "Large",  img: img3 },
-  { id: 10, name: "Zara",    breed: "Indie",     gender: "Female", age: "7 months",   location: "Gurgaon, Haryana",   size: "Medium", img: img4 },
-  { id: 11, name: "Buddy",   breed: "Beagle",    gender: "Male",   age: "3 years",    location: "Rohtak, Haryana",    size: "Medium", img: img5 },
-  { id: 12, name: "Luna",    breed: "Pomeranian",gender: "Female", age: "5 months",   location: "Faridabad, Haryana", size: "Small",  img: img6 },
-];
 
 const BREEDS  = ["All", "Indie", "Labrador", "Pomeranian", "Beagle", "Poodle"];
 const SIZES   = ["All", "Small", "Medium", "Large"];
@@ -40,9 +19,15 @@ function Tag({ label }: { label: string }) {
   );
 }
 
-function PetCard({ pet }: { pet: typeof ALL_PETS[0] }) {
+function PetCard({ pet }: { pet: PetData }) {
   const [hovered, setHovered] = useState(false);
   const navigate = useNavigate();
+
+  const handleAdoptClick = () => {
+    localStorage.setItem(SELECTED_PET_ID_KEY, String(pet.id));
+    navigate("/pet-profile");
+  };
+
   return (
     <div
       onMouseEnter={() => setHovered(true)}
@@ -76,7 +61,7 @@ function PetCard({ pet }: { pet: typeof ALL_PETS[0] }) {
         <p className="font-[Inter,sans-serif] text-[11px] text-black/60 m-0">📍 {pet.location}</p>
 
         <button
-          onClick={() => navigate("/pet-profile")}
+          onClick={handleAdoptClick}
           className="mt-[14px] w-full bg-[#4CBFFF] text-white font-[Inter,sans-serif] font-semibold text-[13px] border-none rounded-full py-[9px] cursor-pointer transition-colors duration-200 hover:bg-[#2db0f5]"
         >Adopt Me 🐾</button>
       </div>
@@ -98,6 +83,12 @@ function Sidebar({
   ageMax: number; setAgeMax: (v: number) => void;
 }) {
   const navigate = useNavigate();
+
+  const handleMeetRocky = () => {
+    localStorage.setItem(SELECTED_PET_ID_KEY, "1");
+    navigate("/pet-profile");
+  };
+
   return (
     <aside className="w-72 shrink-0 bg-white rounded-[48px] border-2 border-black/5 p-8 flex flex-col gap-7 h-fit sticky top-[110px]">
       {/* Header */}
@@ -174,7 +165,7 @@ function Sidebar({
         <p className="font-[Inter,sans-serif] font-bold text-[15px] mb-[6px] text-[#5a3c00]">🌟 Featured Today</p>
         <p className="font-[Inter,sans-serif] text-[12px] text-[rgba(80,50,0,0.85)] mb-3">Rocky is waiting for a forever home. Don't miss him!</p>
         <button 
-          onClick={() => navigate("/pet-profile")}
+          onClick={handleMeetRocky}
           className="bg-white text-[#5a3c00] font-[Inter,sans-serif] font-bold text-[12px] border-none rounded-full px-[18px] py-[7px] cursor-pointer"
         >
           Meet Rocky →
@@ -219,6 +210,20 @@ export default function BrowsePage() {
   const [search,  setSearch]  = useState("");
   const [ageMax,  setAgeMax]  = useState(60);
   const [page,    setPage]    = useState(1);
+  const [adoptedPetIds, setAdoptedPetIds] = useState<number[]>([]);
+
+  useEffect(() => {
+    const raw = localStorage.getItem(ADOPTED_PET_IDS_KEY);
+    if (!raw) return;
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        setAdoptedPetIds(parsed.filter((id): id is number => typeof id === "number"));
+      }
+    } catch {
+      // Ignore malformed localStorage values and keep defaults.
+    }
+  }, []);
 
   const ageInMonths = (age: string) => {
     const m = age.match(/(\d+)\s*(year|month)/i);
@@ -229,13 +234,14 @@ export default function BrowsePage() {
   const filtered = useMemo(() => ALL_PETS.filter(p => {
     const months = ageInMonths(p.age);
     return (
+      !adoptedPetIds.includes(p.id)             &&
       (breed  === "All" || p.breed  === breed)  &&
       (size   === "All" || p.size   === size)   &&
       (gender === "All" || p.gender === gender) &&
       months <= ageMax                          &&
       p.name.toLowerCase().includes(search.toLowerCase())
     );
-  }), [breed, size, gender, search, ageMax]);
+  }), [breed, size, gender, search, ageMax, adoptedPetIds]);
 
   const totalPages = Math.ceil(filtered.length / PAGES_PER_VIEW);
   const visible = filtered.slice((page - 1) * PAGES_PER_VIEW, page * PAGES_PER_VIEW);
@@ -305,8 +311,8 @@ export default function BrowsePage() {
         </div>
       </div>
 
-      {/* Footer — copied from landing page */}
-      <div className="w-full relative overflow-hidden h-[561px]">
+      {/* Footer section — same exported <Footer /> as landing page */}
+      <div className="relative bottom-0 left-0 w-full overflow-x-hidden">
         <Footer />
       </div>
     </div>

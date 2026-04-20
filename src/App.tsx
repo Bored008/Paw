@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from "react-router";
 import LandingPage, { Component77951261HandDrawnPaintPawPrint } from "./pages/Landing/LandingPage";
 import BrowsePage from "./pages/Browse/BrowsePage";
 import ProfilePage from "./pages/Profile/ProfilePage";
+import AdoptionPage from "./pages/Adoption/AdoptionPage";
 import bgPattern from "./assets/pet adoption background.png";
 
 // ─── Landing page wrapper (keeps the existing scale logic) ───────────────────
@@ -74,6 +75,7 @@ export default function App() {
       <Route path="/" element={<LandingWrapper />} />
       <Route path="/available-pets" element={<BrowseWrapper />} />
       <Route path="/pet-profile" element={<ProfilePage />} />
+      <Route path="/adoption" element={<AdoptionPage />} />
     </Routes>
   );
 }

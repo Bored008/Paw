@@ -17,10 +17,21 @@ export function Frame() {
   );
 }
 
-export function Frame1() {
+export function Frame1({ variant = "prev" }: { variant?: "prev" | "next" } = {}) {
+  const svgStyle =
+    variant === "next"
+      ? { left: "9px", top: "-48px" }
+      : { left: "-2px" };
+
   return (
     <div className="relative size-[144px]" data-name="Frame">
-      <svg className="absolute block inset-0 size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 144 144">
+      <svg
+        className="absolute block inset-0 size-full"
+        fill="none"
+        preserveAspectRatio="none"
+        viewBox="0 0 144 144"
+        style={svgStyle}
+      >
         <g id="Frame">
           <path d="M54.0003 36L90 72L54 108" id="Vector" stroke="var(--stroke-0, white)" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="16" strokeOpacity="0.76" strokeWidth="9" />
         </g>

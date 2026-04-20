@@ -7110,7 +7110,7 @@ function Group73() {
 
 function Group72() {
   return (
-    <div className="-translate-x-1/2 absolute contents left-[calc(50%+68.05px)] top-[60.41px]">
+    <div className="-translate-x-1/2 absolute contents left-[calc(50%)] top-[60.41px]">
       <div className="absolute flex inset-[10.78%_38.26%_76.92%_56.96%] items-center justify-center translate-x-[28px] translate-y-[12px]" style={{ containerType: "size" }}>
         <div className="flex-none h-[hypot(-47.9747cqw,52.0253cqh)] rotate-[42.68deg] w-[hypot(52.0253cqw,47.9747cqh)]">
           <Group73 />
@@ -7211,16 +7211,19 @@ function Frame32() {
 
 export function Footer() {
   return (
-    <div className="relative bottom-0 h-[560.508px] left-0 overflow-clip w-full" data-name="Footer">
-      <Group71 />
-      <div className="absolute bottom-0 h-[224px] left-0 w-full" data-name="Screenshot 2026-04-14 110854 1">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <img alt="" className="absolute h-[102.23%] left-[-0.01%] max-w-none top-0 w-[100.03%]" src={imgScreenshot202604141108541} />
+    <div className="relative bottom-0 left-0 w-full overflow-x-hidden" data-name="Footer">
+      {/* Figma layer positions assume a 1440px-wide artboard; keep paw art + “Paw” + links centered on wide screens */}
+      <div className="relative mx-auto h-[560.508px] w-full max-w-[1440px] overflow-clip">
+        <Group71 />
+        <div className="absolute bottom-0 h-[224px] left-0 w-full" data-name="Screenshot 2026-04-14 110854 1">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <img alt="" className="absolute h-[102.23%] left-[-0.01%] max-w-none top-0 w-[100.03%]" src={imgScreenshot202604141108541} />
+          </div>
         </div>
+        <Group72 />
+        <Group74 />
+        <Frame32 />
       </div>
-      <Group72 />
-      <Group74 />
-      <Frame32 />
     </div>
   );
 }
