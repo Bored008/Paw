@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import svgPaths from "./svg-l8a5nkkvbb";
 import imgImage8 from "./3ee116e0e0c5d8493030f59bcdee8e02f4f843de.png";
 import imgImage6 from "./39822095d3bd75db7100b528723679e4b42cf543.png";
@@ -682,7 +682,6 @@ function HeroSection() {
     <div className="absolute contents left-[-381px] top-0" data-name="Hero Section">
       <Group1 />
       <Button />
-      <Frame1 />
     </div>
   );
 }
@@ -7212,17 +7211,23 @@ function Frame32() {
 export function Footer() {
   return (
     <div className="relative bottom-0 left-0 w-full overflow-x-hidden" data-name="Footer">
-      {/* Figma layer positions assume a 1440px-wide artboard; keep paw art + “Paw” + links centered on wide screens */}
-      <div className="relative mx-auto h-[560.508px] w-full max-w-[1440px] overflow-clip">
+      <div className="relative w-full h-[560.508px]">
+        {/* Full-width background and images */}
         <Group71 />
         <div className="absolute bottom-0 h-[224px] left-0 w-full" data-name="Screenshot 2026-04-14 110854 1">
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <img alt="" className="absolute h-[102.23%] left-[-0.01%] max-w-none top-0 w-[100.03%]" src={imgScreenshot202604141108541} />
+            <img alt="" className="absolute h-[102.23%] left-0 max-w-none top-0 w-full object-cover" src={imgScreenshot202604141108541} />
           </div>
         </div>
-        <Group72 />
-        <Group74 />
-        <Frame32 />
+
+        {/* Centered content container (1440px wide) */}
+        <div className="absolute inset-0 left-1/2 -translate-x-1/2 w-[1440px] pointer-events-none">
+          <div className="relative w-full h-full pointer-events-auto">
+            <Group72 />
+            <Group74 />
+            <Frame32 />
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -7576,7 +7581,7 @@ function Faq({ setFaqExtraHeight }: { setFaqExtraHeight: (h: number) => void }) 
   }, [setFaqExtraHeight]);
 
   return (
-    <div className="absolute bg-white left-[95px] rounded-[64px] top-[4098px] w-[1255px] transition-all duration-300" style={{ height: contentHeight }} data-name="Faq">
+    <div id="faq" className="absolute bg-white left-[95px] rounded-[64px] top-[4098px] w-[1255px] transition-all duration-300" style={{ height: contentHeight }} data-name="Faq">
       <div className="overflow-visible relative rounded-[inherit] size-full">
         <Group75 />
         <div className="-translate-y-1/2 absolute flex flex-col font-['Poppins:SemiBold',sans-serif] justify-center leading-[0] left-[calc(50%-119.5px)] not-italic text-[#55a7e0] text-[64px] top-[107px] whitespace-nowrap">
@@ -7605,12 +7610,16 @@ function Component77951261HandDrawnPaintPawPrint19() {
 
 function Button2() {
   return (
-    <div className="-translate-x-1/2 absolute bg-[#55a7e0] content-stretch flex gap-[28px] h-[50px] items-center justify-center left-[calc(50%+2.5px)] pl-[26px] pr-[5.922px] py-[4.23px] rounded-[8459.069px] top-[3790px] w-[231px]" data-name="Button">
+    <Link 
+      to="/pet-care-tips"
+      className="-translate-x-1/2 absolute bg-[#55a7e0] content-stretch flex gap-[28px] h-[50px] items-center justify-center left-[calc(50%+2.5px)] pl-[26px] pr-[5.922px] py-[4.23px] rounded-[8459.069px] top-[3790px] w-[231px] cursor-pointer hover:scale-105 transition-all z-[50] pointer-events-auto no-underline" 
+      data-name="Button"
+    >
       <div className="flex flex-col font-['Public_Sans:SemiBold',sans-serif] font-semibold justify-center leading-[0] relative shrink-0 text-[20.304px] text-white whitespace-nowrap">
         <p className="leading-[23.688px]">Get more tips</p>
       </div>
       <Component77951261HandDrawnPaintPawPrint19 />
-    </div>
+    </Link>
   );
 }
 
@@ -8164,6 +8173,7 @@ export default function LandingPage({ onHeightChange }: { onHeightChange?: (heig
 
   return (
     <div className="relative w-[1440px] mx-auto overflow-hidden bg-transparent transition-all duration-300" style={{ height: 5361 + faqExtraHeight }} data-name="pet adoption landing page">
+      <LandingNavBar activePage="home" />
       <Group8 />
       <Button />
       <AdoptNowButton />
@@ -8185,8 +8195,21 @@ export default function LandingPage({ onHeightChange }: { onHeightChange?: (heig
 }
 
 // ─── Exported nav bar for reuse on other pages ───────────────────────────────
-export function LandingNavBar({ activePage = "home" }: { activePage?: "home" | "available-pets" | "about" }) {
+export function LandingNavBar({ activePage = "home" }: { activePage?: "home" | "available-pets" | "about" | "faq" | "care-tips" | "list-a-pet" | "profile" }) {
   const navigate = useNavigate();
+
+  const handleFaqClick = () => {
+    if (window.location.pathname === "/") {
+      const faqElement = document.getElementById("faq");
+      if (faqElement) {
+        faqElement.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      navigate("/");
+      // The scroll will have to be handled on the landing page mount if we want it automatic, 
+      // but for now simple navigation is a good start.
+    }
+  };
 
   const linkStyle = (active: boolean): React.CSSProperties => ({
     fontFamily: active ? "'Poppins',sans-serif" : "Inter,sans-serif",
@@ -8240,13 +8263,15 @@ export function LandingNavBar({ activePage = "home" }: { activePage?: "home" | "
               <Group10 />
             </div>
           </div>
-          <span style={{ fontFamily: "'Times New Roman',serif", color: "#4CBFFF", fontSize: 34, fontWeight: 400, letterSpacing: -1, lineHeight: "48px" }}>Paw</span>
+          <span onClick={() => navigate("/")} style={{ fontFamily: "'Times New Roman',serif", color: "#4CBFFF", fontSize: 34, fontWeight: 400, letterSpacing: -1, lineHeight: "48px", cursor: "pointer" }}>Paw</span>
         </div>
 
         {/* Nav links — matches Container from Figma */}
-        <div style={{ display: "flex", gap: 54, alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
           <button onClick={() => navigate("/")} style={linkStyle(activePage === "home")}>Home</button>
           <button onClick={() => navigate("/available-pets")} style={linkStyle(activePage === "available-pets")}>Available Pets</button>
+          <button onClick={() => navigate("/pet-care-tips")} style={linkStyle(activePage === "care-tips")}>Care Tips</button>
+          <button onClick={handleFaqClick} style={linkStyle(activePage === "faq")}>FAQ</button>
           <button style={linkStyle(activePage === "about")}>About Us</button>
         </div>
 

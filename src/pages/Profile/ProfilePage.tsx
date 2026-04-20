@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useNavigate } from "react-router";
 import bgPawPattern from "../../assets/d15d8a3400ac588591d5698365ec9b4b844e08fe.png";
-import { ALL_PETS, PetData, SELECTED_PET_ID_KEY } from "../../data/pets";
+import { getAllPetsCombined, PetData, SELECTED_PET_ID_KEY } from "../../data/pets";
 import { Footer, LandingNavBar } from "../Landing/LandingPage";
 
 import {
@@ -180,13 +180,14 @@ const MainContent = ({ pet }: { pet: PetData }) => {
 export default function ProfilePage() {
   const selectedPet = useMemo(() => {
     const selectedId = Number(localStorage.getItem(SELECTED_PET_ID_KEY));
+    const combinedPets = getAllPetsCombined();
     if (Number.isFinite(selectedId)) {
-      const matchedPet = ALL_PETS.find((pet) => pet.id === selectedId);
+      const matchedPet = combinedPets.find((pet) => pet.id === selectedId);
       if (matchedPet) {
         return matchedPet;
       }
     }
-    return ALL_PETS[0];
+    return combinedPets[0];
   }, []);
 
   return (

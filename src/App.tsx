@@ -4,6 +4,8 @@ import LandingPage, { Component77951261HandDrawnPaintPawPrint } from "./pages/La
 import BrowsePage from "./pages/Browse/BrowsePage";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import AdoptionPage from "./pages/Adoption/AdoptionPage";
+import PostPetPage from "./pages/PostPet/PostPetPage";
+import PetCareTipsPage from "./pages/PetCareTips/PetCareTipsPage";
 import bgPattern from "./assets/pet adoption background.png";
 
 // ─── Landing page wrapper (keeps the existing scale logic) ───────────────────
@@ -76,6 +78,8 @@ export default function App() {
       <Route path="/available-pets" element={<BrowseWrapper />} />
       <Route path="/pet-profile" element={<ProfilePage />} />
       <Route path="/adoption" element={<AdoptionPage />} />
+      <Route path="/post-pet" element={<PostPetPage />} />
+      <Route path="/pet-care-tips" element={<PetCareTipsPage />} />
     </Routes>
   );
 }

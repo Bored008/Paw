@@ -8,6 +8,7 @@ const testimonialPetImg = "/assets/images/cooper_testimonial.png";
 
 export const SELECTED_PET_ID_KEY = "selectedPetId";
 export const ADOPTED_PET_IDS_KEY = "adoptedPetIds";
+export const POSTED_PETS_KEY = "postedPets";
 
 export type PetData = {
   id: number;
@@ -155,3 +156,12 @@ export const ALL_PETS: PetData[] = [
     about: "Luna is a bright, playful pomeranian puppy who loves attention and gentle training. She thrives in homes ready for puppy routines and positive socialization.",
   },
 ];
+
+export const getAllPetsCombined = (): PetData[] => {
+  try {
+    const posted = JSON.parse(localStorage.getItem(POSTED_PETS_KEY) || "[]");
+    return [...posted, ...ALL_PETS];
+  } catch {
+    return ALL_PETS;
+  }
+};

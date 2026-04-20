@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { Footer, LandingNavBar } from "../Landing/LandingPage";
-import { ADOPTED_PET_IDS_KEY, ALL_PETS, PetData, SELECTED_PET_ID_KEY } from "../../data/pets";
+import { ADOPTED_PET_IDS_KEY, getAllPetsCombined, PetData, SELECTED_PET_ID_KEY } from "../../data/pets";
 // heroImg removed — background is now the paw pattern from App.tsx BrowseWrapper
 
 const BREEDS  = ["All", "Indie", "Labrador", "Pomeranian", "Beagle", "Poodle"];
@@ -203,6 +203,7 @@ function Pagination({ page, total, onChange }: { page: number; total: number; on
 
 // ─── Main Page ───────────────────────────────────────────────────────────────
 export default function BrowsePage() {
+  const navigate = useNavigate();
 
   const [breed,   setBreed]   = useState("All");
   const [size,    setSize]    = useState("All");
@@ -231,17 +232,20 @@ export default function BrowsePage() {
     return m[2].toLowerCase().startsWith("year") ? +m[1] * 12 : +m[1];
   };
 
-  const filtered = useMemo(() => ALL_PETS.filter(p => {
-    const months = ageInMonths(p.age);
-    return (
-      !adoptedPetIds.includes(p.id)             &&
-      (breed  === "All" || p.breed  === breed)  &&
-      (size   === "All" || p.size   === size)   &&
-      (gender === "All" || p.gender === gender) &&
-      months <= ageMax                          &&
-      p.name.toLowerCase().includes(search.toLowerCase())
-    );
-  }), [breed, size, gender, search, ageMax, adoptedPetIds]);
+  const filtered = useMemo(() => {
+    const combinedPets = getAllPetsCombined();
+    return combinedPets.filter(p => {
+      const months = ageInMonths(p.age);
+      return (
+        !adoptedPetIds.includes(p.id)             &&
+        (breed  === "All" || p.breed  === breed)  &&
+        (size   === "All" || p.size   === size)   &&
+        (gender === "All" || p.gender === gender) &&
+        months <= ageMax                          &&
+        p.name.toLowerCase().includes(search.toLowerCase())
+      );
+    });
+  }, [breed, size, gender, search, ageMax, adoptedPetIds]);
 
   const totalPages = Math.ceil(filtered.length / PAGES_PER_VIEW);
   const visible = filtered.slice((page - 1) * PAGES_PER_VIEW, page * PAGES_PER_VIEW);
@@ -288,6 +292,13 @@ export default function BrowsePage() {
                   className="bg-transparent border-none outline-none font-[Inter,sans-serif] text-[14px] w-[140px]"
                 />
               </div>
+              <button 
+                onClick={() => navigate("/post-pet")}
+                className="bg-[#2db0f5] text-white font-['Poppins',sans-serif] font-semibold text-[13px] border-none rounded-full px-[18px] py-[7px] cursor-pointer transition-colors duration-200 hover:bg-[#1fa1e5] shadow-sm flex items-center gap-[6px]"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                Put Your Pet for Adoption
+              </button>
             </div>
           </div>
 
