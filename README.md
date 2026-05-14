@@ -10,7 +10,7 @@ Designed with a clean and friendly interface, Paw focuses on making pet adoption
 
 ## Demo
 
-![Home Page](./assets/petadoptionlandingpage.png)
+![Home Page](src/assets/petadoptionlandingpage.png)
 
 ![Adoption Journey](your-image-link-here)
 
